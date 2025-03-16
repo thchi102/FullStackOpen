@@ -1,4 +1,4 @@
-# Exercise 0.5
+# Exercise 0.6
 ## New Note Diagram in SPA:
 
 ```mermaid
