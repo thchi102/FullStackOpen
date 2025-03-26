@@ -10,12 +10,22 @@ npm create vite@latest
 # Create a react app with template
 npm create vite@latest my-vue-app -- --template vue
 ```
+After creating the project,
+```bash
+# install required packages specified in the node_modules folder
+npm install
+# start the application
+npm run dev
+```
 * When using React, we don't directly edit the HTML file. All content that needs to be rendered is usually defined as a React component
 * React can also render dynamic content
 - **Never remove the `export default` line from the buttom of the file**
-
+    
 ### JSX
 * It may seems like the React component is returning HTML markups, but in fact, it is JSX.
 * JSX is **XML-like**, which means that all tags needs to be closed
     * e.g. HTML: `<br>`, XML: `<br />`
+* First letter of React components must be **Capitalized**
+* A React component ussually needs to contain a root element(e.g `<div>`), otherwise it will result in error. But this will create extra div element, which is not ideal. This can be avoid by using **[Fragments](https://react.dev/reference/react/Fragment)**
+* Objects cannot be rendered 
 
