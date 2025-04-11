@@ -72,4 +72,12 @@ npm run dev
 
 * **Never define component inside a component**. React treat the component defined in a component as a new component in every render. React cannot optimize the components this way.
 
+### Exercise
+* How to create a zero-filled array:
+    1. `Array(anecdotes.length).fill(0)`
+    2. `const ary = new Uint8Array(10)`
+* Find the Max value in an array:
+    `Math.max(...arr)` --> **Use spread syntax** if the input is an array\
+    `Math.max()` takes numbers directly, like:`Math.max(1,2,3)`
+
 
