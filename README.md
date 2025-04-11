@@ -7,7 +7,7 @@ Notes and exercise submissions can be found in corresponding folders.
 
 ## Progress
 
-- [ ] **part0:** Fundamental of web apps
+- [x] **part0:** Fundamental of web apps
 - [ ] **part1:** Introduction to React
 - [ ] **part2:** Communicating with server
 - [ ] **part3:** Programming a server with NodeJS and Express
