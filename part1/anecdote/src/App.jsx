@@ -47,7 +47,7 @@ const App = () => {
       <p>has {votes[selected]} votes</p>
       <Button onClick={addVote} text="Vote"/>
       <Button onClick={setRandomNumber} text="Next anecdote"/> 
-
+      
       <h1>Anecdote with most votes</h1>
       <AnecdoteWithMostVote anecdotes={anecdotes} votes={votes}/>
     </div>
