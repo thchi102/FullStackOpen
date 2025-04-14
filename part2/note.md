@@ -25,3 +25,5 @@ Snippets make it easier to enter repeating code patterns. press `ctrl+shift+P` a
     * `event.target` stores the element where the event occurs
 * **How to access form input**
     * Using state in to manage inputs allow us to **control** the input. This means the input is managed by React and can perform instant validation.
+* **Template String**
+    similar to format string in python. use ` `` ` to form the string, and `${}` to access variables.
