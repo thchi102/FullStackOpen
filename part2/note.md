@@ -1,5 +1,20 @@
 # Part 2 Notes
 
+## Promises
+Promises are central to modern JavaScript developmen.
+https://www.w3schools.com/jS/js_promise.asp
+
+Producing code: is code that can take some time\
+Consuming code: is code that must wait for the result\
+--> **Promise is an object that links producing codea and consuming code.**
+
+A promise object have three states: Pending, Fulfilled, Rejected.
+
+You can think of it as a modern way to handle **asynchronous callback**
+
+
+
+
 ## Debug ProTips: VS Code snippets
 https://code.visualstudio.com/docs/editing/userdefinedsnippets#_creating-your-own-snippets
 
@@ -35,7 +50,7 @@ Snippets make it easier to enter repeating code patterns. press `ctrl+shift+P` a
     * import axios: `import axios from 'axios'`
     * `axios.get(<server_url>)` returns a promise object
     * **Promise object**\
-    a promise object represents a eventual completion of an asynchronous operstion
+    a promise object represents a eventual completion of an asynchronous operation
         * `pending`
         * `fulfilled`
         * `rejected`
@@ -44,3 +59,34 @@ Snippets make it easier to enter repeating code patterns. press `ctrl+shift+P` a
     * `useEffect` takes 2 parameters.
         1. The effect itself(a function)
         2. How often the effect is run: an empty array means that the effect only run with the **first render**. or you can define components in the array so that the effect run every time the component is changed.
+
+## Altering data in server
+* **REST**
+    * Resources are fetched from the server with HTTP GET request
+    * Creating new resources in the server is done by HTTP POST request
+    * When you want to update an object in the server:
+        * use PUT request to replace the object with a new one
+        * use PATCH to only modify a portion of the object
+    >**Note:** POST is usually used for creating a new object in the server. and PUT/PATCH is used for updating objects in the server.
+* **Extracting communication with backend to seperate module:**
+    * We can put all the backend communication function to a seperate module in folder `services`
+    >**IMPORTANT** : the `then()` method in promise will also returns a promise.
+
+* A cleaner syntax to define objects:
+    ```javascript
+    const person = {
+        name: name,
+        age: age
+        }
+
+        ↓
+        ↓ //when the key and value has the same name
+        ↓
+
+        const person = { name, age }
+    ```
+
+* **Promise error handling**
+    * If there is an error means the promise is in rejected state. we can add a error handling function with the `.catch()` method after the `.then()` methed\
+    -->`promise.then(<callback>).catch(<errHandler>)`
+    * If the `catch()` method is after a promise chain. It will be called **once any promise in the chain throws an error**
