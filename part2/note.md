@@ -90,3 +90,30 @@ Snippets make it easier to enter repeating code patterns. press `ctrl+shift+P` a
     * If there is an error means the promise is in rejected state. we can add a error handling function with the `.catch()` method after the `.then()` methed\
     -->`promise.then(<callback>).catch(<errHandler>)`
     * If the `catch()` method is after a promise chain. It will be called **once any promise in the chain throws an error**
+
+## Adding styles to React app
+* If want to add style to specific component, it is better to use **class selector**
+    * in HTML: `<p class="yourClass"></p>`
+    * in React: `<p className="yourClass"></p>`
+
+    and in the CSS file, to select the specific component:
+    `.yourClass`
+
+* **Inline-style**
+    * CSS: 
+    ```css
+    {
+        color: green;
+        font-style: italic;
+        font-size: 16px;
+    }
+    ```
+    * React inline style object:
+    ```javascript
+    {
+        color: 'green',
+        fontStyle: 'italic',
+        fontSize: 16
+    }
+    ```
+    * Limitation: [pseudo-classes](https://developer.mozilla.org/en-US/docs/Web/CSS/Pseudo-classes) can't be used straightforwardly.

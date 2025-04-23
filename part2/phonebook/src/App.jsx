@@ -4,12 +4,15 @@ import Persons from './components/Persons'
 import Filter from './components/Filter'
 import PersonForm from './components/PersonForm'
 import personService from './services/person'
+import Message from './components/Message'
 
 const App = () => {
   const [persons, setPersons] = useState([]) 
   const [newName, setNewName] = useState('')
   const [newPhoneNum, setNewPhoneNum] = useState('')
   const [filterName, setFilterName] = useState('')
+  const [successMsg, setSuccessMsg] = useState(null)
+  const [errorMsg, setErrorMsg] = useState(null)
   const baseURL = "http://localhost:3001/persons"
 
   useEffect(() => {
@@ -31,7 +34,20 @@ const App = () => {
         if(confirm){
           personService.update(id, newPerson)
           .then(
-            returned => setPersons(persons.map(p => p.id !== id ? p : returned))
+            returned => {
+              setPersons(persons.map(p => p.id !== id ? p : returned))
+              setNewName('')
+              setNewPhoneNum('')
+              setSuccessMsg(`Updated ${returned.name}'s number`)
+              setTimeout(() => setSuccessMsg(null), 3000)
+            }
+          )
+          .catch(
+            () => {
+              setPersons(persons.filter(p => p.name !== newPerson.name))
+              setErrorMsg(`${newPerson.name} has already been removed`)
+              setTimeout(() => setErrorMsg(null), 3000)
+            }
           )
         }
       }
@@ -44,6 +60,8 @@ const App = () => {
           setPersons(persons.concat(returned))
           setNewName('')
           setNewPhoneNum('')
+          setSuccessMsg(`Added ${returned.name}`)
+          setTimeout(() => setSuccessMsg(null), 3000)
         })
       }
   }
@@ -80,7 +98,8 @@ const App = () => {
   return (
     <div>
       <h2>Phonebook</h2>
-
+      <Message message={successMsg} type="success"/>
+      <Message message={errorMsg} type="error"/>
       <Filter filterName={filterName} handleFilterName={handleFilterName}/>
 
       <h2>Add a new contact</h2>

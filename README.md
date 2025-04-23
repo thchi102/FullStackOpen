@@ -9,7 +9,7 @@ Notes and exercise submissions can be found in corresponding folders.
 
 - [x] **part0:** Fundamental of web apps
 - [x] **part1:** Introduction to React
-- [ ] **part2:** Communicating with server
+- [x] **part2:** Communicating with server
 - [ ] **part3:** Programming a server with NodeJS and Express
 - [ ] **part4:** Testing Express servers, user administration
 - [ ] **part5:** Testing React apps

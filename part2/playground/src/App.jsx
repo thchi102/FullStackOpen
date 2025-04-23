@@ -3,10 +3,38 @@ import Note from './components/Note'
 import axios from 'axios'
 import noteService from './services/notes'
 
+const Notification = ({message}) => {
+  if(message === null){
+    return null
+  }
+
+  return (
+    <div className="error">
+        {message}
+    </div>
+  )
+}
+
+const Footer = () => {
+  const footerStyle = {
+    color: 'green',
+    fontStyle: 'italic',
+    fontSize: 16
+  }
+
+  return (
+    <div style={footerStyle}>
+      <br />
+      <em>Note app, Department of Computer Science, University of Helsinki 2025</em>
+    </div>
+  )
+}
+
 function App(props) {
   const [notes, setNotes] = useState([])
   const [newNote, setNewNote] = useState("a new note ...")
   const [showAll, setShowAll] = useState(true)
+  const [errorMessage, setErrorMessage] = useState(null)
 
   const toggleImportanceOf = (id) => {
     const note = notes.find(n => n.id==id)
@@ -18,7 +46,8 @@ function App(props) {
     )
     .catch(
       error => {
-        alert(`the note ${note.content} was already deleted from the server.`)
+        setErrorMessage(`Note '${note.content}' was already removed from server`)
+        setTimeout(() => setErrorMessage(null), 5000)
         setNotes(notes.filter(n => n.id !== id))
       }
     )
@@ -57,6 +86,7 @@ function App(props) {
     <>
      <div>
       <h1>Notes</h1>
+      <Notification message={errorMessage}/>
       <ul>
         {/*Note: the key attribute is defined in <Note> instead of <li>*/}
         {notesToShow.map((note) => <Note key={note.id} note={note} toggleImportance={()=>toggleImportanceOf(note.id)}/>)}
@@ -69,6 +99,7 @@ function App(props) {
         <input value={newNote} onChange={handleNoteChange}/>
         <button type="submit">save</button>
       </form>   
+      <Footer/>
     </div>
     </>
   )
