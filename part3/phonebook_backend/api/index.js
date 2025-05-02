@@ -52,7 +52,7 @@ var persons = [
     }
 ]
 
-app.get("/", (req, res) => res.send("Express on Vercel"));
+app.get("/", (req, res) => res.send("Express on Vercel editted"));
 
 app.get('/api/persons', (request, response) => {
     response.json(persons)
@@ -123,4 +123,3 @@ app.use(unknownEndpoint)
 const PORT = process.env.PORT || 3001
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`)})
-console.log(`Server running on port ${PORT}`)
