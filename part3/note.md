@@ -91,7 +91,11 @@ https://vercel.com/guides/using-express-with-vercel
 * When the application is deployed, we must create a **production build**, this can be done with `npm run build`. This will create a `dist` directory, containing the html file and a minified version of our JavaScript code. 
 
 ### Serving static file from the backend
-* One option for deployiing the frontend is to copy the production build
+* One option for deployiing the frontend is to copy the production build. 
+* To make express show the static content, we need a built-in middleware called `static`. Add the following line: 
+``` javascript
+app.use(express.static('dist'))
+```
 
 
   
