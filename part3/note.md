@@ -73,6 +73,15 @@ app.use(express.json())
 ### Middleware
 Middlewares are functions that handle the request and repsonse object. Like the JSON parser we used.
 
+## Deploying app to internet
+
+### Same origin policy and CORS
+protocol + host + port = origin
+* **Same origin policy** happens on the Browser side. when a response is coming from a foreign origin. The browser will check the `Access-Control-Allow-origin` header to determine whether to refuse it. This is a security mechanism to prevent vulnerability like XSS
+* **CORS**(Cross-Origin Resource Sharing) allows restricted resource to be requested from a foreign domain. CORS is a server-side mechanism to safely share resources with specific origins.
+* we can allow CORS with Node's `cors` middleware
+
+
 
   
 
