@@ -81,6 +81,17 @@ protocol + host + port = origin
 * **CORS**(Cross-Origin Resource Sharing) allows restricted resource to be requested from a foreign domain. CORS is a server-side mechanism to safely share resources with specific origins.
 * we can allow CORS with Node's `cors` middleware
 
+### Deploy to Vercel
+https://vercel.com/guides/using-express-with-vercel
+* add the `vercel.json` to the project root 
+```json
+{ "version": 2, "rewrites": [{ "source": "/(.*)", "destination": "/api" }] }
+```
+### Frontend Production build
+* When the application is deployed, we must create a **production build**, this can be done with `npm run build`. This will create a `dist` directory, containing the html file and a minified version of our JavaScript code. 
+
+### Serving static file from the backend
+* One option for deployiing the frontend is to copy the production build
 
 
   
