@@ -97,6 +97,38 @@ https://vercel.com/guides/using-express-with-vercel
 app.use(express.static('dist'))
 ```
 
+### Streamlining deploying of the frontend
+To deploy new production build without extra manual work.
+Put the Frontend and Backend file in seperate `frontend` and `backend` folder. And add the following scripts to `package.json`
+```json
+{
+  "scripts": {
+    //...
+    "build:ui": "rm -rf dist && cd ../frontend && npm run build && cp -r dist ../backend",
+    "deploy:full": "npm run build:ui && git add . && git commit -m uibuild && git push"
+  }
+}
+```
+
+### Proxy
+Since we've changed the `baseURL` to relative, the local development mode won't work. This can be solved by modifying the `vite.config.js` file.
+```js
+import { defineConfig } from 'vite'
+import react from '@vitejs/plugin-react'
+
+// https://vitejs.dev/config/
+export default defineConfig({
+  plugins: [react()],
+  server: {
+    proxy: {
+      '/api': {
+        target: 'http://localhost:3001',
+        changeOrigin: true,
+      },
+    }
+  },
+})
+```
 
   
 
