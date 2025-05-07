@@ -129,6 +129,9 @@ export default defineConfig({
   },
 })
 ```
+* Backend on port 3001
+* Frontend on port 5173
+This way the React develoment server will act as a proxy. Any request to `http://localhost:5173/api` will be forwarded to the server at `http://localhost:3001`. And from the frontend(5173) perspective, the request is made to the same source(5173/api). There is no longer needed for the CORS library.
 
   
 
