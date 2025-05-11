@@ -133,5 +133,38 @@ export default defineConfig({
 * Frontend on port 5173
 This way the React develoment server will act as a proxy. Any request to `http://localhost:5173/api` will be forwarded to the server at `http://localhost:3001`. And from the frontend(5173) perspective, the request is made to the same source(5173/api). There is no longer needed for the CORS library.
 
+## Saving data to MongoDB
+### MongoDB
+Steps to setup a MongoDB database:
+1. Create a cluster on the MongoDB Atlas website
+2. Create user
+3. Define IP address access list
+4. Connect to your database
+> **Important**: We will not use the native MongoDB drive library, we will use Mongoose instead, for more straightforward operations.
+
+* To set the name of a database:
+  ```js
+  const url = `mongodb+srv://fullstack:${password}@cluster0.a5qfl.mongodb.net/<db_name>?retryWrites=true&w=majority&appName=Cluster0`
+  ```
+  change the `<db_name>` to the name you wish to set.
+
+### Schema
+Document databases like Mongo are **schemaless**, meaning it can store documents with completely different fields. However, Mongoose uses schema to define the documents stored
+
+```js
+const noteSchema = new mongoose.Schema({
+  content: String,
+  important: Boolean,
+})
+
+const Note = mongoose.model('Note', noteSchema)
+```
+creates a model in mongoose, it is a constuctor function that allows modifying certain MongoDB collections.
+> **Important**: The model name must be set with **singular, capitalized** form. Mongoose will pluralizes it, and associates it with a MongoDB collection in lowercase. eg. `Note -> notes`
+
+* `Models` are constructor functions that create new JavaScript objects based on the provided parameters.
+
+
+
   
 
