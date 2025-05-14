@@ -164,6 +164,34 @@ creates a model in mongoose, it is a constuctor function that allows modifying c
 
 * `Models` are constructor functions that create new JavaScript objects based on the provided parameters.
 
+### Connecting the backend to database
+* To format the objects returned by mongoose, we can modify the `toJSON` method in the schema, which is used on all instances produced with that schema.
+```js
+noteSchema.set('toJSON', {
+  transform: (document, returnedObject) => {
+    returnedObject.id = returnedObject._id.toString()
+    delete returnedObject._id
+    delete returnedObject.__v
+  }
+})
+```
+
+### Moving DB to its own module
+The public interface of the module is defined by setting a value to the `module.exports` variable
+```js
+module.exports = mongoose.model('Note', noteSchema)
+```
+This way other things designed inside the module like variable `mongoose` and `url` will not be accessible to users of the module.
+
+### Define environment variable with dotenv
+`npm install dotenv`\
+Then you can store your environment variable in the `.env` file.\
+* Add `require('dotenv').config()`, then you can reference the env variables like usual
+* When deploying the application, remember not to expose your .env online. 
+
+### Using database in route handlers
+
+
 
 
   
