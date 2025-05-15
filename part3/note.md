@@ -237,6 +237,27 @@ const errorHandler = (error, request, response, next) => {
 app.use(errorHandler)
 ```
 
+## Validation and ESLint
+* we can validate a request body format using Mongoose. We can define validation rules in the schema:
+```js
+const noteSchema = new mongoose.Schema({
+  content: {
+    type: String,
+    minLength: 5,
+    required: true
+  },
+  important: Boolean
+})
+```
+There are built-in validator, we can also create custom validator. When validation fails, we get `ValidationError`
+
+### Deploying the database to production
+When deploying application, we can't use `.env`. We have to set the environment variable in the hosting service.
+
+
+
+
+
 
   
 

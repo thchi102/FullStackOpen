@@ -10,46 +10,6 @@ app.use(express.static('dist'))
 app.use(express.json())
 
 
-//connect to MongoDB
-// const password = process.argv[2]
-// const url = process.env.MONGODB_URI
-// mongoose.connect(url)
-
-// const noteSchema = new mongoose.Schema({
-//     content: String,
-//     important: Boolean,
-//   })
-
-// const Note = mongoose.model('Note', noteSchema)
-
-// noteSchema.set('toJSON', {
-//     transform: (document, returnedObject) => {
-//         returnedObject.id = returnedObject._id.toString()
-//         delete returnedObject._id
-//         delete returnedObject.__v
-//     }
-// })
-
-
-
-let notes = [
-    {
-      id: "1",
-      content: "HTML is easy",
-      important: true
-    },
-    {
-      id: "2",
-      content: "Browser can execute only JavaScript",
-      important: false
-    },
-    {
-      id: "3",
-      content: "GET and POST are the most important methods of HTTP protocol",
-      important: true
-    }
-  ]
-
 app.get('/', (request, response) => {
     response.send('<h1>Hello world!</h1>')
 })
@@ -107,7 +67,7 @@ const generateId = () => {
     return String(maxId+1)
 }
   
-app.post('/api/notes', (request, response) => {
+app.post('/api/notes', (request, response, next) => {
     const body = request.body
     if(!body.content){
         return response.status(400).json({
@@ -124,6 +84,7 @@ app.post('/api/notes', (request, response) => {
     note.save().then(savedNote => {
         response.json(savedNote)
     })
+    .catch(error => next(error))
 })
 
 const errorHandler = (error, request, response, next) => {
@@ -132,6 +93,9 @@ const errorHandler = (error, request, response, next) => {
     if (error.name === 'CastError') {
       return response.status(400).send({ error: 'malformatted id' })
     } 
+    else if (error.name === 'ValidationError') {
+        return response.status(400).json({ error: error.message })
+    }
   }
   
   app.use(errorHandler)
