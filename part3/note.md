@@ -189,9 +189,53 @@ Then you can store your environment variable in the `.env` file.\
 * Add `require('dotenv').config()`, then you can reference the env variables like usual
 * When deploying the application, remember not to expose your .env online. 
 
-### Using database in route handlers
+### Moving error handling into middleware
+Change the route handler to pass the error forward with `next` function, the `next` function is passed into the route handler as the third parameter. If the `next` function is called without an argument, then the execution will simply move on to the next route. But if it is called with an argument, the execution will continue to the **error handler middelware**.\
 
+Express error handler:
+```js
+const errorHandler = (error, request, response, next) => {
+  console.error(error.message)
 
+  if (error.name === 'CastError') {
+    return response.status(400).send({ error: 'malformatted id' })
+  } 
+  // In other error situation, the error will be passed to the default Express error handler
+  next(error)
+}
+
+// this has to be the last loaded middleware, also all the routes should be registered before this!
+app.use(errorHandler)
+```
+
+> **IMPORTANT**: this has to be the last loaded middleware, also all the routes should be registered before this!
+
+### Order of middleware
+It is important to be aware of the order when defining middleware. The correct order should be like:
+```js
+app.use(express.static('dist'))
+app.use(express.json())
+app.use(requestLogger)
+
+app.post('/api/notes', (request, response) => {
+  const body = request.body
+  // ...
+})
+
+const unknownEndpoint = (request, response) => {
+  response.status(404).send({ error: 'unknown endpoint' })
+}
+
+// handler of requests with unknown endpoint
+app.use(unknownEndpoint)
+
+const errorHandler = (error, request, response, next) => {
+  // ...
+}
+
+// handler of requests with result to errors
+app.use(errorHandler)
+```
 
 
   

@@ -65,7 +65,7 @@ app.get('/api/persons', (request, response) => {
 
 app.get('/api/info', (request, response) => {
   const datetime = new Date()
-  Person.count({}).then(count => {
+  Person.countDocuments({}).then(count => {
     response.send(
       `
       <div>Phonebook has info for ${count} people<div/>
@@ -80,10 +80,10 @@ app.get('/api/persons/:id', (request, response) => {
   Person.findById(id).then(person => {
     if(person){
       response.send(
-        `
-          <div>${person.name}</div>
-          <div>${person.number}</div>
-        `
+        {
+          name: person.name,
+          number: person.number
+        }
       )
     }
     else{
@@ -92,14 +92,15 @@ app.get('/api/persons/:id', (request, response) => {
   })
 })
 
-app.delete('/api/persons/:id', (request, response) => {
+app.delete('/api/persons/:id', (request, response, next) => {
   const id = request.params.id
-  persons = persons.filter(p => p.id !== id)
-
-  response.status(204).end() //204 means no content to return
+  Person.findByIdAndDelete(id).then(result => {
+    response.status(204).end()
+  })
+  .catch(error => next(error))
 })
 
-app.post('/api/persons', (request, response) => {
+app.post('/api/persons', (request, response, next) => {
   const body = request.body
   if(!body){
     return response.status(400).json({error: "No content found"})
@@ -122,6 +123,7 @@ app.post('/api/persons', (request, response) => {
   .then(savedPerson => {
     response.json(savedPerson)
   })
+  .catch(error => next(error))
 })
 
 const unknownEndpoint = (request, response) => {
@@ -130,6 +132,19 @@ const unknownEndpoint = (request, response) => {
 
 app.use(unknownEndpoint)
 
+const errorHandler = (error, request, response, next) => {
+  console.error(error.message)
+
+  if(error.name === 'CastError'){
+    return response.status(400).send({error: 'malformatted id'})
+  }
+
+  next(error)
+}
+
+app.use(errorHandler)
+
 const PORT = process.env.PORT || 3001
 app.listen(PORT, () => {
-  console.log(`Server running on port ${PORT}`)})
+  console.log(`Server running on port ${PORT}`)
+})
