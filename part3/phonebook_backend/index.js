@@ -2,7 +2,6 @@ require('dotenv').config()
 const express = require('express')
 const morgan = require('morgan')
 const cors = require('cors')
-const mongoose = require('mongoose')
 const Person = require('./models/person')
 
 const app = express()
@@ -20,7 +19,7 @@ const requestLogger = (request, response, next) => {
 
 
 app.use(express.json())
-//app.use(requestLogger)
+app.use(requestLogger)
 app.use(
   morgan(function (tokens, req, res) {
     return [
@@ -35,32 +34,32 @@ app.use(
 )
 
 var persons = [
-    { 
-      "id": "1",
-      "name": "Arto Hellas", 
-      "number": "040-123456"
-    },
-    { 
-      "id": "2",
-      "name": "Ada Lovelace", 
-      "number": "39-44-5323523"
-    },
-    { 
-      "id": "3",
-      "name": "Dan Abramov", 
-      "number": "12-43-234345"
-    },
-    { 
-      "id": "4",
-      "name": "Mary Poppendieck", 
-      "number": "39-23-6423122"
-    }
+  {
+    'id': '1',
+    'name': 'Arto Hellas',
+    'number': '040-123456'
+  },
+  {
+    'id': '2',
+    'name': 'Ada Lovelace',
+    'number': '39-44-5323523'
+  },
+  {
+    'id': '3',
+    'name': 'Dan Abramov',
+    'number': '12-43-234345'
+  },
+  {
+    'id': '4',
+    'name': 'Mary Poppendieck',
+    'number': '39-23-6423122'
+  }
 ]
 
 app.get('/api/persons', (request, response) => {
-    Person.find({}).then(person => {
-        response.json(person)
-    })
+  Person.find({}).then(person => {
+    response.json(person)
+  })
 })
 
 app.get('/api/info', (request, response) => {
@@ -94,36 +93,36 @@ app.get('/api/persons/:id', (request, response) => {
 
 app.delete('/api/persons/:id', (request, response, next) => {
   const id = request.params.id
-  Person.findByIdAndDelete(id).then(result => {
+  Person.findByIdAndDelete(id).then(() => {
     response.status(204).end()
   })
-  .catch(error => next(error))
+    .catch(error => next(error))
 })
 
 app.post('/api/persons', (request, response, next) => {
   const body = request.body
   if(!body){
-    return response.status(400).json({error: "No content found"})
+    return response.status(400).json({ error: 'No content found' })
   }
 
   if(!body.name || !body.number){
-    return response.status(400).json({error: "Missing name or number"})
+    return response.status(400).json({ error: 'Missing name or number' })
   }
 
   if(persons.find(p => p.name === body.name)){
-    return response.status(400).json({error: "Name must be unique"})
+    return response.status(400).json({ error: 'Name must be unique' })
   }
 
   const new_person = new Person({
     name: body.name,
     number: body.number
   })
-  
+
   new_person.save()
-  .then(savedPerson => {
-    response.json(savedPerson)
-  })
-  .catch(error => next(error))
+    .then(savedPerson => {
+      response.json(savedPerson)
+    })
+    .catch(error => next(error))
 })
 
 const unknownEndpoint = (request, response) => {
@@ -136,11 +135,11 @@ const errorHandler = (error, request, response, next) => {
   console.error(error.message)
 
   if(error.name === 'CastError'){
-    return response.status(400).send({error: 'malformatted id'})
+    return response.status(400).send({ error: 'malformatted id' })
   }
 
   if(error.name === 'ValidationError'){
-    return response.status(400).json({error: error.message})
+    return response.status(400).json({ error: error.message })
   }
 
   next(error)

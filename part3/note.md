@@ -254,6 +254,63 @@ There are built-in validator, we can also create custom validator. When validati
 ### Deploying the database to production
 When deploying application, we can't use `.env`. We have to set the environment variable in the hosting service.
 
+### Lint
+* Lint is any tool that detects and flags error in programming languages
+* We add ESLint to **Development dependencies**, these dependencies are not needed in production mode.\
+  `npm install eslint @eslint/js --save-dev`\
+  After installation, we can initialize ESLint by\
+  `npx eslint --init`
+
+### Formatting the configuration file
+1. First we modify the default  config file to: 
+```js
+import globals from 'globals'
+import js from '@eslint/js'
+
+export default [
+  js.configs.recommended, //Use ESLint's recommended settings
+  {
+    files: ['**/*.js'], //Files to check
+    languageOptions: {
+      sourceType: 'commonjs', //Language feature to expect
+      globals: { ...globals.node }, //Include global variables defined in globals.node
+      ecmaVersion: 'latest', //understand and lint the latest features
+    },
+  },
+]
+
+```
+* `@eslint/js` provides recommended setting you can use in the config file.
+
+2. Install plugins that defines code style related rules.\
+`npm install --save-dev @stylistic/eslint-plugin-js`\
+Import and enable these coding style rules.
+```js
+import globals from 'globals'
+import js from '@eslint/js'
+import stylisticJs from '@stylistic/eslint-plugin-js'
+
+export default [
+  {
+    // ...
+    plugins: { 
+      '@stylistic/js': stylisticJs,
+    },
+    rules: { 
+      '@stylistic/js/indent': ['error', 2],
+      '@stylistic/js/linebreak-style': ['error', 'unix'],
+      '@stylistic/js/quotes': ['error', 'single'],
+      '@stylistic/js/semi': ['error', 'never'],
+    }, 
+  },
+]
+```
+
+### Running the Linter
+* Insepcting and validating a file can be done with: `npx eslint index.js`. But it is recommended to create a npm command for linting. 
+
+
+
 
 
 
