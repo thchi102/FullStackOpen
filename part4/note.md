@@ -35,3 +35,20 @@
 * `index.js` only imports the actual appication from `app.js` and start the application
 
 * Definition of custom middlewares are moved into `utils/middleware.js`
+
+### Testing Node applications
+* There are a lot of test libraries: Mocha, Jest, Vitest. Node also has built-in test laibrary: `node --test`
+    1. Create a seperate directory for our tests, and create test files with `.test.js` as extension
+    2. add this to create tests and check the results
+       ```js
+       const { test } = require('node:test')
+       const assert = require('node:assert')
+       ```
+    3. Create a test like the following:
+    ```js
+    test('reverse of a', () => {
+        const result = reverse('a')
+        assert.strictEqual(result, 'a')
+    })
+    ```
+* When comparing objects, `deepStrictEqual` is more suitable than `strictEqual`
