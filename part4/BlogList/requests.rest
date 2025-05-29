@@ -10,3 +10,17 @@ Content-Type: application/json
     "url": "https://reactpatterns.com/",
     "likes": 7
 }
+
+###
+DELETE http://localhost:3003/api/blogs/6838105a993e1fa7a6644e16
+
+###
+PUT http://localhost:3003/api/blogs/
+Content-Type: application/json
+
+{
+    "title": "update blog",
+    "author": "Jonathan",
+    "url": "https://update.com/",
+    "likes": 72
+}

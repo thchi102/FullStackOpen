@@ -52,3 +52,40 @@
     })
     ```
 * When comparing objects, `deepStrictEqual` is more suitable than `strictEqual`
+
+## Testing the backend
+### Test environment
+* The convention in Node is to define the excution mode with the `NODE_ENV` environment variable. We can define the `NODE_ENV` in the npm run script. To ensure cross platform compatibility, we install the `cross-env` package.
+
+* When running tests, it is better to use a database that is installed and running on the developer's local machine. This can be achieved by Mongo in-memory or docker.
+
+### Supertest
+* To test our API, we use the [Supertest](https://github.com/visionmedia/supertest) package
+
+* We specified the port in index.js, but we didn't include it in the test. Supertest will handle the port problem so we don't have to worry about it.
+
+* Supertest handles port assigning for us and provide functions like `expect()`, which makes testing easier when compared to axios.
+
+### Initializing the database before test
+* The library `node:test` offers functions for executing operations before or during the test
+* We can use the `beforeEach` function to initialize the database before each test
+
+### Running tests one by one
+* use the `.only` method to define which test to execute. and run the test with `npm test -- --test-only`. Or we can also specify the file name or test names in the command line.
+
+### async/await
+* The syntax makes it possible to use *asynchronous functions* look synchronous
+* If we want to make several asynchronous function calls with callback functions in one `.then` method, this will result in a callback hell. We can solve this by **chaining promises**. But we can write cleaner and more readable code with **async/await**
+
+* To use `await` in asynchronous operation, they have to return a promise. and using `await` is only possible in an `async` function
+
+### Error handling
+* `try/catch` is recommended for handling exception when using async/await. 
+* There is a way to eliminate the use of `try/catch`. We can use the `express-async-error` library, just import it in `app.js` and you're ready to go. The library will pass the error directly to the error-handling middleware.
+
+### Nested async
+* If an async function is defined inside another async function, they create a seperate asynchronous operation. There are several ways to resolve this issue.
+    1. use the `Promise.all(<promiseArray>)` method. We store promises returned by each tasks in the array. The method will transform the promise array into a single promise that will be fulfilled **after all promises in the array is resolved**. We can also access each promise by assigning a variable to the returned value.
+    However, this method processes promises **in parallel**. Promises can't be executed in order
+    2. If we need the promises to be executed in order, we can use a `for...of` block to complete the inner process.
+    3. Even simpler, if you are inserting instances into mongoDB, we can use the mongoose's built-in method `insertMany()`
