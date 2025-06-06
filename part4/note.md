@@ -89,3 +89,59 @@
     However, this method processes promises **in parallel**. Promises can't be executed in order
     2. If we need the promises to be executed in order, we can use a `for...of` block to complete the inner process.
     3. Even simpler, if you are inserting instances into mongoDB, we can use the mongoose's built-in method `insertMany()`
+
+## User Administration
+### References across collections
+* A way to add a relationship between two document, is to create another collection and **use Object ID to reference a document in another collection**.\
+For example, a note will contain a **reference key** to the user who created it with the user id.
+### Mongoose schema for users
+* After defining the schema for users, we add a reference to the notes in the users schema:
+```js
+const userSchema = new mongoose.Schema({
+  //...
+  notes: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'Note'
+    }
+  ],
+})
+```
+and a reference to the users in the notes schema:
+```js
+const noteSchema = new mongoose.Schema({
+  //...
+  users: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'User'
+    }
+  ],
+})
+```
+### Creating users
+* **Test-driven development (TDD)** means tests are written before the new functionality is implemented
+* Mongoose do not provide a way to check uniqueness of a field, however it is possible to achieve uniqueness with uniqueness index for a field. **BE CAREFUL: If there are already documents in the database that violate the uniqueness condition, no uniqueness index will be created**
+
+### Populate
+* Document database doesn't support join queries natively, but we can do this with the mongoose library. This is done with the `populate()` method
+```js
+usersRouter.get('/', async (request, response) => {
+  const users = await User
+    .find({}).populate('notes')
+    //The argument defines the ids referencing note objects in the notes field of the user will be replaced by the referenced note document
+
+  response.json(users)
+})
+```
+and we can also choose the field to include from the referenced document
+```js
+const users = await User
+    .find({}).populate('notes', {content: 1})
+    //to only include the content
+```
+> **IMPORTANT**: The `populate()` method can only be used on fields defined with *ref* option in the Mongoose schema.
+
+## Token authentication
+* a token is generated and assigned to a user when he logged in. The user then sends requests with the token to authenticate.
+
